@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Plans</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Payment Plans</h1>
+        
+        <div class="plans-section">
+            {% if plans %}
+                <div class="plans-list">
+                    {% for plan in plans %}
+                        <div class="plan-card">
+                            <h3>Payment Plan #{{ plan.id }}</h3>
+                            <div class="plan-details">
+                                <p><strong>Total Amount:</strong> ${{ "%.2f"|format(plan.total_amount) }}</p>
+                                <p><strong>Monthly Payment:</strong> ${{ "%.2f"|format(plan.monthly_amount) }}</p>
+                                <p><strong>Remaining Installments:</strong> {{ plan.remaining_installments }}</p>
+                                <p><strong>Started:</strong> {{ plan.created_at }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No payment plans found.</p>
+            {% endif %}
+        </div>
+
+        <div class="setup-plan-section">
+            <h2>Setup New Payment Plan</h2>
+            <form id="setup-plan-form">
+                <div class="form-group">
+                    <label for="bill_id">Select Bill:</label>
+                    <select name="bill_id" id="bill_id" required>
+                        <!-- This will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="installments">Number of Installments:</label>
+                    <select name="installments" id="installments" required>
+                        <option value="3">3 months</option>
+                        <option value="6">6 months</option>
+                        <option value="12">12 months</option>
+                    </select>
+                </div>
+                <button type="submit">Setup Payment Plan</button>
+            </form>
+        </div>
+
+        <div class="navigation">
+            <a href="/billing/outstanding" class="button">View Outstanding Bills</a>
+            <a href="/chat" class="button">Back to Chat</a>
+        </div>
+    </div>
+
+    <script>
+        // Fetch outstanding bills and populate the select
+        async function loadOutstandingBills() {
+            try {
+                const response = await fetch('/billing/outstanding');
+                const bills = await response.json();
+                const select = document.getElementById('bill_id');
+                
+                bills.forEach(bill => {
+                    const option = document.createElement('option');
+                    option.value = bill.id;
+                    option.textContent = `Bill #${bill.id} - $${bill.amount}`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading bills:', error);
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('setup-plan-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/billing/setup-plan', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                
+                if (data.plan_id) {
+                    alert('Payment plan created successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to create payment plan');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to setup payment plan');
+            }
+        });
+
+        // Load bills when page loads
+        document.addEventListener('DOMContentLoaded', loadOutstandingBills);
+    </script>
+</body>
+</html> 

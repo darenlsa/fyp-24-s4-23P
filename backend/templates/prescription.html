@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Prescriptions</title>
+</head>
+<body>
+    <h1>Your Prescriptions</h1>
+
+    <!-- Loop through prescriptions and display them -->
+    <div>
+        {% if prescriptions %}
+            <ul>
+                {% for prescription in prescriptions %}
+                    <li><strong>{{ prescription.details }}</strong> (Issued on: {{ prescription.issued_at }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no prescriptions yet.</p>
+        {% endif %}
+    </div>
+
+    <a href="/chat">Back to Chat</a>
+</body>
+</html>

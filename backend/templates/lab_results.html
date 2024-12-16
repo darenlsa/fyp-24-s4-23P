@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Results</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Lab Results</h1>
+        
+        <div class="results-section">
+            {% if results %}
+                <div class="results-list">
+                    {% for result in results %}
+                        <div class="result-card">
+                            <h3>{{ result.test_type }}</h3>
+                            <div class="result-details">
+                                <p><strong>Result:</strong> {{ result.result_value }}</p>
+                                <p><strong>Date:</strong> {{ result.result_date }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No lab results found.</p>
+            {% endif %}
+        </div>
+
+        <div class="navigation">
+            <a href="/health-records" class="button">Back to Health Records</a>
+            <a href="/chat" class="button">Back to Chat</a>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Receipt</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        .receipt {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .receipt-details {
+            margin: 20px 0;
+        }
+        .receipt-details p {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .print-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="receipt">
+            <div class="receipt-header">
+                <h1>Payment Receipt</h1>
+                <p>Healthcare Clinic</p>
+            </div>
+
+            <div class="receipt-details">
+                <p>
+                    <span>Transaction ID:</span>
+                    <span>#{{ receipt.transaction_id }}</span>
+                </p>
+                <p>
+                    <span>Date:</span>
+                    <span>{{ receipt.date }}</span>
+                </p>
+                <p>
+                    <span>Amount Paid:</span>
+                    <span>${{ "%.2f"|format(receipt.amount_paid) }}</span>
+                </p>
+                <p>
+                    <span>Payment Method:</span>
+                    <span>{{ receipt.payment_method }}</span>
+                </p>
+                <p>
+                    <span>Bill Amount:</span>
+                    <span>${{ "%.2f"|format(receipt.bill_amount) }}</span>
+                </p>
+                <p>
+                    <span>Email:</span>
+                    <span>{{ receipt.email }}</span>
+                </p>
+            </div>
+
+            <div class="receipt-footer">
+                <p>Thank you for your payment!</p>
+                <p>For any questions, please contact our billing department.</p>
+            </div>
+        </div>
+
+        <div class="navigation no-print">
+            <button onclick="window.print()" class="print-button">Print Receipt</button>
+            <a href="/billing/outstanding" class="button">Back to Bills</a>
+            <a href="/chat" class="button">Back to Chat</a>
+        </div>
+    </div>
+</body>
+</html> 

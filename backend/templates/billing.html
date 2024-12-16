@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bills</title>
+</head>
+<body>
+    <h1>Your Bills</h1>
+
+    <!-- Display bills for the user -->
+    <div>
+        {% if bills %}
+            <ul>
+                {% for bill in bills %}
+                    <li>
+                        <strong>Amount: ${{ bill.amount }}</strong><br>
+                        Due Date: {{ bill.due_date }}<br>
+                        Status: {{ 'Paid' if bill.paid else 'Unpaid' }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no bills.</p>
+        {% endif %}
+    </div>
+
+    <a href="/chat">Back to Chat</a>
+</body>
+</html>

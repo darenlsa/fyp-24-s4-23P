@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Records</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Health Records</h1>
+        
+        <div class="records-section">
+            <h2>Recent Records</h2>
+            {% if records %}
+                <div class="records-list">
+                    {% for record in records %}
+                        <div class="record-card">
+                            <h3>{{ record.record_type }}</h3>
+                            <p>{{ record.record_data }}</p>
+                            <small>Date: {{ record.created_at }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No health records found.</p>
+            {% endif %}
+        </div>
+
+        <div class="actions-section">
+            <h2>Request Records</h2>
+            <form id="request-form">
+                <select name="format_type" required>
+                    <option value="digital">Digital Copy</option>
+                    <option value="printed">Printed Copy</option>
+                </select>
+                <button type="submit">Request Records</button>
+            </form>
+        </div>
+
+        <div class="navigation">
+            <a href="/lab-results" class="button">View Lab Results</a>
+            <a href="/chat" class="button">Back to Chat</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('request-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/request-records', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                
+                if (data.request_id) {
+                    alert('Record request submitted successfully!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to submit request');
+            }
+        });
+    </script>
+</body>
+</html> 
